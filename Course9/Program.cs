@@ -11,12 +11,15 @@ public class Program
         //Uncomment to seed data.
         //SeedData(context);
 
-        Product? product1 = await context.Products.FirstOrDefaultAsync(p => p.Name == "Kapı1");
-        product1.Name = "Bob";
-        product1.Price = 400;
+        Product product1 = await context.Products.FirstOrDefaultAsync(p => p.Name == "Bob") ?? new();
+        context.Entry(product1).State = EntityState.Detached;
+
+        Product product2 = product1;
+        product2.Id = Guid.NewGuid();
+        product2.Price = 401;
+        await context.AddAsync(product2);
 
         await context.SaveChangesAsync();
-
     }
 
     public async Task SeedData(ETicaretContext context)
